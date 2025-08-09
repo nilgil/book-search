@@ -1,2 +1,11 @@
+server.servlet.context-path: /api
+
 spring:
   application.name: book-search
+  web.resources.add-mappings: false
+
+---
+spring.config.activate.on-profile: local
+
+spring:
+  docker.compose.lifecycle-management: start_only
