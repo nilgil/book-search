@@ -1,0 +1,84 @@
+name: Link Issue From Branch Name
+
+on:
+  pull_request:
+    types: [ opened ]
+
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull request number to link issue'
+        required: true
+
+jobs:
+  link-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set PR number
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "pr_number=${{ github.event.inputs.pr_number }}" >> $GITHUB_ENV
+          else
+            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          fi
+
+      - name: Get PR branch name
+        run: |
+          echo "Fetching branch name for PR #${{ env.pr_number }}"
+          branch_name=$(gh pr view ${{ env.pr_number }} --json headRefName --jq .headRefName)
+          echo "Branch name is: $branch_name"
+          echo "branch_name=$branch_name" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract issue number from branch name
+        run: |
+          echo "Extracting issue number from branch: ${{ env.branch_name }}"
+          if [[ "${{ env.branch_name }}" =~ ^[a-zA-Z]+-?\/([0-9]+) ]]; then
+            issue_number="${BASH_REMATCH[1]}"
+            echo "issue_number=$issue_number" >> $GITHUB_ENV
+            echo "Found issue number: $issue_number"
+          else
+            echo "No issue number found in branch name. Skipping."
+            exit 0
+          fi
+
+      - name: Update PR Description
+        if: env.issue_number
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = process.env.issue_number;
+            const prNumber = parseInt(process.env.pr_number, 10);
+
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            const currentBody = pullRequest.body || '';
+            const closingStatement = `Closes #${issueNumber}`;
+
+            if (currentBody.includes(closingStatement)) {
+              console.log(`PR description already contains "${closingStatement}".`);
+              return;
+            }
+
+            const newBody = `${closingStatement}\n\n${currentBody}`;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              body: newBody
+            });
+
+            console.log(`Successfully updated PR #${prNumber} description with "${closingStatement}".`);
