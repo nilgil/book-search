@@ -1,4 +1,4 @@
-package com.nilgil.book.domain;
+package com.nilgil.book.share;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,11 +33,11 @@ class IsbnTest {
             assertThatNoException().isThrownBy(() -> new Isbn(raw));
         }
 
-        @ParameterizedTest(name = "잘못된 입력값 \"{0}\"으로 ISBN 생성 시 InvalidIsbnException 예외 발생")
+        @ParameterizedTest(name = "\"{0}\"")
         @MethodSource("invalidIsbnProvider")
-        @DisplayName("유효하지 않은 값으로 ISBN 생성")
+        @DisplayName("유효하지 않은 값으로 ISBN 생성 시 InvalidIsbnException 예외 발생")
         void constructor_withInvalidInput_shouldThrowException(String raw) {
-            assertThatIllegalArgumentException().isThrownBy(() -> new Isbn(raw));
+            assertThatThrownBy(() -> new Isbn(raw)).isInstanceOf(InvalidIsbnException.class);
         }
 
         private static Stream<Arguments> invalidIsbnProvider() {
@@ -123,14 +123,14 @@ class IsbnTest {
     class Output {
 
         @Test
-        @DisplayName("ISBN-13 형식으로 출력된다")
+        @DisplayName("ISBN-13 형식으로 출력할 수 있다")
         void should_output_as_isbn13() {
             Isbn isbn = new Isbn("9783161484100");
             assertThat(isbn.asIsbn13()).isEqualTo("9783161484100");
         }
 
         @Test
-        @DisplayName("978로 시작하는 ISBN-13은 ISBN-10으로 변환되어 조회된다.")
+        @DisplayName("978로 시작하는 ISBN-13은 ISBN-10으로 출력할 수 있다")
         void convertible_isbn13_should_output_as_isbn10() {
             Isbn isbn = new Isbn("9783161484100");
             Optional<String> mayIsbn10 = isbn.tryAsIsbn10();
@@ -139,7 +139,7 @@ class IsbnTest {
         }
 
         @Test
-        @DisplayName("979로 시작하는 ISBN-13은 ISBN-10으로 변환되지 않는다")
+        @DisplayName("978로 시작하지 않는 ISBN-13은 ISBN-10으로 조회 시 빈 값을 반환한다")
         void non_convertible_isbn13_should_not_output_as_isbn10() {
             Isbn isbn = new Isbn("9791189585174");
             Optional<String> mayIsbn10 = isbn.tryAsIsbn10();
