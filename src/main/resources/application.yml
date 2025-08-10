@@ -2,10 +2,13 @@ server.servlet.context-path: /api
 
 spring:
   application.name: book-search
+  profiles.active: local
   web.resources.add-mappings: false
+  sql.init.mode: never
 
 ---
 spring.config.activate.on-profile: local
 
 spring:
   docker.compose.lifecycle-management: start_only
+  sql.init.mode: always
