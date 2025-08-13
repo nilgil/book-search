@@ -12,3 +12,11 @@ spring.config.activate.on-profile: local
 spring:
   docker.compose.lifecycle-management: start_only
   sql.init.mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book
+    username: nilgil
+    password: secret
+
+logging:
+  level:
+    org.springframework.jdbc.core: DEBUG

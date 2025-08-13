@@ -1,9 +1,10 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    platform: linux/amd64
+    image: nilgil183/pg_search_ko:1.0
     environment:
-      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_DB=book'
+      - 'POSTGRES_USER=nilgil'
       - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
     ports:
-      - '5432'
+      - '5432:5432'
