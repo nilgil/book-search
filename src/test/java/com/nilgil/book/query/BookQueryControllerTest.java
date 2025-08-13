@@ -1,12 +1,20 @@
 package com.nilgil.book.query;
 
+import com.nilgil.book.search.BookSearchFacade;
+import com.nilgil.book.search.executor.model.BookHit;
+import com.nilgil.book.search.executor.model.BookSearchResult;
+import com.nilgil.book.search.executor.model.Metadata;
+import com.nilgil.book.search.planner.SearchStrategy;
 import com.nilgil.book.share.Isbn;
+import com.nilgil.book.share.PageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -22,6 +30,9 @@ class BookQueryControllerTest {
 
     @MockitoBean
     private BookReadService bookReadService;
+
+    @MockitoBean
+    private BookSearchFacade bookSearchFacade;
 
     @Test
     @DisplayName("ISBN으로 도서 상세 조회 성공")
@@ -57,4 +68,56 @@ class BookQueryControllerTest {
         mockMvc.perform(get("/books/9788991000155"))
                 .andExpect(status().isNotFound());
     }
+
+
+    @Test
+    @DisplayName("검색어로 도서 검색 성공")
+    void searchByQuery_success() throws Exception {
+        // given
+        String query = "테스트|hi";
+        Isbn isbn = new Isbn("9788991000155");
+
+        BookSearchResult result = new BookSearchResult(
+                new PageInfo(1, 10, 1, 8),
+                List.of(new BookHit(isbn.asIsbn13(), "테스트 제목", "부제목", "이미지URL", "저자", "2024-01-15")),
+                new Metadata(query, 100L, SearchStrategy.SINGLE_TERM)
+        );
+
+        given(bookSearchFacade.search(any(), any())).willReturn(result);
+
+        // when, then
+        mockMvc.perform(get("/books/search")
+                        .param("q", query)
+                        .param("page", "1")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.searchQuery").value(query))
+                .andExpect(jsonPath("$.books[0].isbn").value(isbn.asIsbn13()))
+                .andExpect(jsonPath("$.books[0].title").value("테스트 제목"))
+                .andExpect(jsonPath("$.books[0].author").value("저자"));
+    }
+
+    @Test
+    @DisplayName("검색 결과가 없을 경우 빈 목록 반환")
+    void searchByQuery_emptyResult() throws Exception {
+        // given
+        String query = "존재하지않는검색어";
+        BookSearchResult result = new BookSearchResult(
+                new PageInfo(0, 10, 0, 0),
+                List.of(),
+                new Metadata(query, 50L, SearchStrategy.SINGLE_TERM)
+        );
+        given(bookSearchFacade.search(any(), any())).willReturn(result);
+
+        // when, then
+        mockMvc.perform(get("/books/search")
+                        .param("q", query)
+                        .param("page", "1")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.searchQuery").value(query))
+                .andExpect(jsonPath("$.books").isArray())
+                .andExpect(jsonPath("$.books").isEmpty());
+    }
+
 }
