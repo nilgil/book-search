@@ -1,0 +1,12 @@
+package com.nilgil.book.search.executor.model;
+
+import com.nilgil.book.share.PageInfo;
+
+import java.util.List;
+
+public record BookSearchResult(
+        PageInfo pageInfo,
+        List<BookHit> bookHits,
+        Metadata metadata
+) {
+}
