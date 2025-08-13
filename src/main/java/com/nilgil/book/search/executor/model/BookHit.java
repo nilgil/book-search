@@ -3,8 +3,6 @@ package com.nilgil.book.search.executor.model;
 import com.nilgil.book.query.BookRow;
 import lombok.Builder;
 
-import java.time.LocalDate;
-
 @Builder
 public record BookHit(
         String isbn,
@@ -12,7 +10,7 @@ public record BookHit(
         String subtitle,
         String image,
         String author,
-        LocalDate published
+        String published
 ) {
     public static BookHit from(BookRow row) {
         return BookHit.builder()
@@ -21,7 +19,7 @@ public record BookHit(
                 .subtitle(row.subtitle())
                 .image(row.image())
                 .author(row.author())
-                .published(LocalDate.parse(row.publishedDate()))
+                .published(row.publishedDate())
                 .build();
     }
 }

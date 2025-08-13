@@ -9,4 +9,7 @@ public record BookSearchResult(
         List<BookHit> bookHits,
         Metadata metadata
 ) {
+    public BookSearchResult {
+        bookHits = bookHits == null ? List.of() : bookHits;
+    }
 }

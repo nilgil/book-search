@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -75,7 +74,7 @@ public class PostgresFtsRepository {
             rs.getString("subtitle"),
             rs.getString("image"),
             rs.getString("author"),
-            LocalDate.parse(rs.getString("published_date"))
+            rs.getString("published_date")
     );
 
 }
