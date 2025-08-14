@@ -1,8 +1,10 @@
 # Book Search (PostgreSQL Only)
 
-PostgreSQL의 Full Text Search(FTS)와 한국어 형태소 분석(textsearch_ko)을 활용해 도서를 검색하는 Spring Boot 애플리케이션입니다. 검색 엔진(Elasticsearch)이나
-캐시/카운터 저장소(Redis) 없이 오직 PostgreSQL 하나로 검색과 인기 검색어 집계를 모두 해결하는 것을 목표로 했습니다.
-또한 조회 모델이기에 일부러 JPA를 사용하지 않고 JDBC를 사용하였습니다. 현 프로젝트는 쿼리 모델만 담당한다는 가정으로 그리하였습니다.
+PostgreSQL의 Full Text Search(FTS)와 한국어 형태소 분석(textsearch_ko)을 활용해 도서를 검색하는 Spring Boot 애플리케이션입니다. 
+검색 엔진(Elasticsearch)이나 캐시/카운터 저장소(Redis) 없이 오직 PostgreSQL 하나로 검색과 인기 검색어 집계를 모두 해결하는 것을 목표로 했습니다.
+
+조회 모델만 다루기 때문에 일부러 JPA를 사용하지 않고 JDBC를 사용하였습니다. 또한 멀티 모듈도 고의적으로 사용하지 않았습니다. 
+기술 의존성 또는 레이어 기준으로 나눌만한 포인트들은 몇 있지만 제가 보기에 현재 프로젝트는 너무 작고 어떻게 확장될지 확실치 않기에 섣부른 판단을 하지 않으려는 의도를 담았습니다.
 
 - 베이스 URL: http://localhost:8080/api
 - Swagger UI: http://localhost:8080/api/swagger
