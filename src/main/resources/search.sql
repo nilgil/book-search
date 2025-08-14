@@ -8,7 +8,7 @@ ALTER TABLE IF EXISTS book_read_model
             setweight(to_tsvector('korean', coalesce(title, '')), 'A') ||
             setweight(to_tsvector('korean', coalesce(author, '')), 'A') ||
             setweight(to_tsvector('korean', coalesce(description, '')), 'B') ||
-            setweight(to_tsvector('korean', coalesce(subtitle, '')), 'B') ||
+            setweight(to_tsvector('korean', coalesce(subtitle, '')), 'C') ||
             setweight(to_tsvector('korean', coalesce(publisher, '')), 'D') ||
             setweight(to_tsvector('korean', coalesce(translator, '')), 'D')
             ) STORED;
