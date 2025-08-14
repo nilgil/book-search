@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KeywordSearchedEventHandler {
 
-    private final SearchKeywordCounter searchKeywordCounter;
+    private final SearchKeywordRepository searchKeywordCounter;
 
     @Async
     @EventListener

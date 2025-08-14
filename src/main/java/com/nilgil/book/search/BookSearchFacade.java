@@ -3,6 +3,7 @@ package com.nilgil.book.search;
 import com.nilgil.book.search.executor.QueryExecutor;
 import com.nilgil.book.search.executor.model.BookSearchResult;
 import com.nilgil.book.search.keyword.KeywordSearchedEvent;
+import com.nilgil.book.search.keyword.SearchKeywordRepository;
 import com.nilgil.book.search.parser.QueryParser;
 import com.nilgil.book.search.parser.model.Query;
 import com.nilgil.book.search.planner.PlannedQuery;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class BookSearchFacade {
@@ -19,7 +22,9 @@ public class BookSearchFacade {
     private final QueryParser parser;
     private final QueryPlanner planner;
     private final QueryExecutor executor;
+
     private final ApplicationEventPublisher publisher;
+    private final SearchKeywordRepository searchKeywordRepository;
 
     public BookSearchResult search(String rawQuery, PageReq pageReq) {
         Query query = parser.parse(rawQuery);
@@ -27,5 +32,9 @@ public class BookSearchFacade {
 
         PlannedQuery plannedQuery = planner.plan(query);
         return executor.execute(plannedQuery, pageReq, rawQuery);
+    }
+
+    public Map<String, Long> getPopularKeywords() {
+        return searchKeywordRepository.getPopularKeywords();
     }
 }

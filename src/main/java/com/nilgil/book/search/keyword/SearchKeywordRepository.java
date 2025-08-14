@@ -2,6 +2,11 @@ package com.nilgil.book.search.keyword;
 
 import com.nilgil.book.search.parser.model.Query;
 
-public interface SearchKeywordCounter {
+import java.util.Map;
+
+public interface SearchKeywordRepository {
+
     void increment(Query query);
+
+    Map<String, Long> getPopularKeywords();
 }
