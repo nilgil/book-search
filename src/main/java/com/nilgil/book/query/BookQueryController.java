@@ -30,4 +30,9 @@ public class BookQueryController {
         BookSearchResult result = bookSearchFacade.search(q, pageReq);
         return BookSearchResponse.from(q, result);
     }
+
+    @GetMapping("/search/top10")
+    PopularKeywordsResponse getPopularKeywords() {
+        return new PopularKeywordsResponse(bookSearchFacade.getPopularKeywords());
+    }
 }
