@@ -3,7 +3,7 @@ package com.nilgil.book.query;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("BOOK_READ_MODEL")
+@Table("book_read_model")
 public record BookRow(
         @Id
         String isbn13,
