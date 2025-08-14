@@ -21,3 +21,15 @@ spring:
 logging:
   level:
     org.springframework.jdbc.core: DEBUG
+
+---
+spring.config.activate.on-profile: local-dev
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/book
+    username: nilgil
+    password: secret
+  sql.init:
+    mode: always
+    schema-locations: classpath:schema.sql, classpath:search.sql

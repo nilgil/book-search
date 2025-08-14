@@ -63,7 +63,7 @@ public class PostgresSearchKeywordRepository implements SearchKeywordRepository 
                     keyword,
                     search_count
                 FROM
-                    popular_keywords
+                    search_keywords
                 ORDER BY
                     search_count DESC
                 LIMIT 10;

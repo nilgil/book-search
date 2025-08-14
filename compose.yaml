@@ -1,6 +1,8 @@
 services:
   postgres:
     platform: linux/amd64
+    # postgres/Dockerfile로 만든 이미지입니다. 빌드가 너무 오래 걸려 개인 저장소에 푸시해 두었습니다.
+    # 한글 검색 지원을 위해 빌드하였습니다.
     image: nilgil183/pg_search_ko:1.0
     environment:
       - 'POSTGRES_DB=book'
@@ -8,3 +10,18 @@ services:
       - 'POSTGRES_PASSWORD=secret'
     ports:
       - '5432:5432'
+  search:
+    profiles:
+      - local-dev
+    build:
+      context: .
+    environment:
+      - 'SPRING_PROFILES_ACTIVE=local-dev'
+      - 'DB_URL=jdbc:postgresql://postgres:5432/book'
+      - 'DB_USER=nilgil'
+      - 'DB_PASSWORD=secret'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    restart: unless-stopped
