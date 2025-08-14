@@ -22,6 +22,10 @@ logging:
   level:
     org.springframework.jdbc.core: DEBUG
 
+springdoc:
+  swagger-ui:
+    path: /swagger
+
 ---
 spring.config.activate.on-profile: local-dev
 
@@ -33,3 +37,7 @@ spring:
   sql.init:
     mode: always
     schema-locations: classpath:schema.sql, classpath:search.sql
+
+springdoc:
+  swagger-ui:
+    path: /swagger
