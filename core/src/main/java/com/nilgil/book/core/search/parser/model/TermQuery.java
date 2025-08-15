@@ -1,0 +1,11 @@
+package com.nilgil.book.core.search.parser.model;
+
+public record TermQuery(String value) implements Query {
+    public TermQuery {
+        if (value == null) {
+            value = "";
+        } else {
+            value = value.trim();
+        }
+    }
+}
