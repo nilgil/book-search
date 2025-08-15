@@ -36,19 +36,19 @@ public class BookQueryController {
                     @ApiResponse(responseCode = "404", description = "도서를 찾을 수 없음")
             }
     )
-    @GetMapping("/{isbn13}")
+    @GetMapping("/{isbn}")
     BookDetailResponse getDetailByIsbn(
-            @Parameter(description = "ISBN-13", example = "9788991000155")
+            @Parameter(description = "ISBN 13 또는 ISBN 10", example = "9788991000155")
             @PathVariable
-            String isbn13
+            String isbn
     ) {
-        Isbn isbn;
+        Isbn wrappedIsbn;
         try {
-            isbn = new Isbn(isbn13);
+            wrappedIsbn = new Isbn(isbn);
         } catch (IllegalArgumentException e) {
-            throw new InvalidIsbnException(isbn13, e);
+            throw new InvalidIsbnException(isbn, e);
         }
-        return bookQueryService.getDetailByIsbn(isbn);
+        return bookQueryService.getDetailByIsbn(wrappedIsbn);
     }
 
     @Operation(
@@ -58,8 +58,8 @@ public class BookQueryController {
     )
     @GetMapping("/search")
     BookSearchResponse searchByQuery(
-            @Parameter(description = "검색 질의", example = "java|스프링")
-            @RequestParam
+            @Parameter(description = "검색 질의", example = "스터디|습관")
+            @RequestParam(required = false)
             String q,
             @Parameter(description = "페이지 번호(0부터 시작)", example = "0")
             @RequestParam(defaultValue = "0")
@@ -69,6 +69,10 @@ public class BookQueryController {
             @Max(100)
             int size
     ) {
+        if (q == null || q.isBlank()) {
+            return BookSearchResponse.EMPTY;
+        }
+
         PageRequest pageRequest = new PageRequest(page, size);
         BookSearchResult result = searchEngine.search(q, pageRequest);
         return BookSearchResponse.from(q, result);

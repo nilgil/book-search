@@ -15,6 +15,12 @@ public record BookSearchResponse(
         List<BookResponse> books,
         SearchMetadata searchMetadata
 ) {
+    public static final BookSearchResponse EMPTY = BookSearchResponse.builder()
+            .searchQuery("")
+            .pageResponse(PageResponse.EMPTY)
+            .books(List.of())
+            .searchMetadata(SearchMetadata.EMPTY)
+            .build();
 
     public static BookSearchResponse from(String query, BookSearchResult result) {
         return BookSearchResponse.builder()
@@ -58,5 +64,6 @@ public record BookSearchResponse(
     }
 
     public record SearchMetadata(long executionTime, String strategy) {
+        public static final SearchMetadata EMPTY = new SearchMetadata(-1, "");
     }
 }

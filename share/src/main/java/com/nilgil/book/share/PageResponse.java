@@ -6,4 +6,5 @@ public record PageResponse(
         int totalPages,
         long totalElements
 ) {
+    public static final PageResponse EMPTY = new PageResponse(0, 0, 0, 0);
 }
