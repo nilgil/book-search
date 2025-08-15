@@ -1,16 +1,5 @@
 dependencies {
     implementation project(':share')
-    implementation project(':search')
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}") {
-        exclude group: "org.apache.commons", module: "commons-lang3"
-    }
-    implementation 'org.apache.commons:commons-lang3:3.18.0'
-
-    runtimeOnly 'org.postgresql:postgresql'
-
-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    api 'org.springframework.boot:spring-boot-starter-data-jdbc'
 }

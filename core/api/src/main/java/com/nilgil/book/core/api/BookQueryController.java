@@ -1,5 +1,6 @@
 package com.nilgil.book.core.api;
 
+import com.nilgil.book.core.api.error.InvalidIsbnException;
 import com.nilgil.book.core.domain.Isbn;
 import com.nilgil.book.search.engine.SearchEngine;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
@@ -41,7 +42,12 @@ public class BookQueryController {
             @PathVariable
             String isbn13
     ) {
-        Isbn isbn = new Isbn(isbn13);
+        Isbn isbn;
+        try {
+            isbn = new Isbn(isbn13);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidIsbnException(isbn13, e);
+        }
         return bookQueryService.getDetailByIsbn(isbn);
     }
 

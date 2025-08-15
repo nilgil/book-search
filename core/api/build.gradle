@@ -4,7 +4,6 @@ dependencies {
     implementation project(':search')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}") {
         exclude group: "org.apache.commons", module: "commons-lang3"

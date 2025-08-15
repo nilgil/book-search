@@ -32,12 +32,12 @@ public record Isbn(String value) {
         if (isValidIsbn10(normalized)) {
             return convert10to13(normalized);
         }
-        throw new InvalidIsbnException("Invalid ISBN: " + normalized);
+        throw new IllegalArgumentException("Invalid ISBN: " + normalized);
     }
 
     private static void requireNonBlank(String s) {
         if (s == null || s.isBlank()) {
-            throw new InvalidIsbnException("ISBN must not be null or blank");
+            throw new IllegalArgumentException("ISBN must not be null or blank");
         }
     }
 
@@ -94,7 +94,7 @@ public record Isbn(String value) {
 
     private static void requireConvertible978(String isbn13) {
         if (!isbn13.startsWith(CONVERTIBLE_ISBN13_PREFIX)) {
-            throw new InvalidIsbnException("Only 978-prefixed can be converted to ISBN-10: " + isbn13);
+            throw new IllegalArgumentException("Only 978-prefixed can be converted to ISBN-10: " + isbn13);
         }
     }
 

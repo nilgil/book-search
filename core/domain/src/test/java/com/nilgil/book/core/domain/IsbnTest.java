@@ -35,9 +35,9 @@ class IsbnTest {
 
         @ParameterizedTest(name = "\"{0}\"")
         @MethodSource("invalidIsbnProvider")
-        @DisplayName("유효하지 않은 값으로 ISBN 생성 시 InvalidIsbnException 예외 발생")
+        @DisplayName("유효하지 않은 값으로 ISBN 생성 시 IllegalArgumentException 예외 발생")
         void constructor_withInvalidInput_shouldThrowException(String raw) {
-            assertThatThrownBy(() -> new Isbn(raw)).isInstanceOf(InvalidIsbnException.class);
+            assertThatThrownBy(() -> new Isbn(raw)).isInstanceOf(IllegalArgumentException.class);
         }
 
         private static Stream<Arguments> invalidIsbnProvider() {

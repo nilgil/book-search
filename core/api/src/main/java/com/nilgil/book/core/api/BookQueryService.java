@@ -1,5 +1,6 @@
 package com.nilgil.book.core.api;
 
+import com.nilgil.book.core.api.error.BookNotFoundException;
 import com.nilgil.book.core.domain.BookRepository;
 import com.nilgil.book.core.domain.Isbn;
 import lombok.RequiredArgsConstructor;
