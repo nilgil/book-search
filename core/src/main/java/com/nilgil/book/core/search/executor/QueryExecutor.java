@@ -2,7 +2,7 @@ package com.nilgil.book.core.search.executor;
 
 import com.nilgil.book.core.search.executor.model.BookSearchResult;
 import com.nilgil.book.core.search.planner.PlannedQuery;
-import com.nilgil.book.core.share.PageReq;
+import com.nilgil.book.share.PageReq;
 
 public interface QueryExecutor {
 

@@ -3,7 +3,7 @@ package com.nilgil.book.core.query;
 import com.nilgil.book.core.search.executor.model.BookHit;
 import com.nilgil.book.core.search.executor.model.BookSearchResult;
 import com.nilgil.book.core.search.executor.model.Metadata;
-import com.nilgil.book.core.share.PageInfo;
+import com.nilgil.book.share.PageInfo;
 import lombok.Builder;
 
 import java.util.List;

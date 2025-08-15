@@ -2,8 +2,7 @@ package com.nilgil.book.core.query;
 
 import com.nilgil.book.core.search.BookSearchFacade;
 import com.nilgil.book.core.search.executor.model.BookSearchResult;
-import com.nilgil.book.core.share.Isbn;
-import com.nilgil.book.core.share.PageReq;
+import com.nilgil.book.share.PageReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

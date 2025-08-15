@@ -1,6 +1,5 @@
 package com.nilgil.book.core.query;
 
-import com.nilgil.book.core.share.Isbn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,7 @@
 package com.nilgil.book.core.search.executor.model;
 
-import com.nilgil.book.core.share.PageInfo;
+
+import com.nilgil.book.share.PageInfo;
 
 import java.util.List;
 

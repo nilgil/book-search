@@ -1,4 +1,4 @@
-package com.nilgil.book.core.share;
+package com.nilgil.book.core.query;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -1,7 +1,6 @@
 package com.nilgil.book.core.query;
 
 
-import com.nilgil.book.core.share.Isbn;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

@@ -1,4 +1,4 @@
-package com.nilgil.book.core.share;
+package com.nilgil.book.share;
 
 public record PageInfo(
         int page,
