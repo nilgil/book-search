@@ -1,10 +1,10 @@
 package com.nilgil.book.core.query;
 
-import com.nilgil.book.core.search.BookSearchFacade;
-import com.nilgil.book.core.search.executor.model.BookHit;
-import com.nilgil.book.core.search.executor.model.BookSearchResult;
-import com.nilgil.book.core.search.executor.model.Metadata;
-import com.nilgil.book.core.search.planner.SearchStrategy;
+import com.nilgil.book.search.engine.SearchEngine;
+import com.nilgil.book.search.engine.executor.model.BookHit;
+import com.nilgil.book.search.engine.executor.model.BookSearchResult;
+import com.nilgil.book.search.engine.executor.model.Metadata;
+import com.nilgil.book.search.engine.planner.SearchStrategy;
 import com.nilgil.book.share.PageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ class BookQueryControllerTest {
     private BookReadService bookReadService;
 
     @MockitoBean
-    private BookSearchFacade bookSearchFacade;
+    private SearchEngine searchEngine;
 
     @Test
     @DisplayName("ISBN으로 도서 상세 조회 성공")
@@ -82,7 +82,7 @@ class BookQueryControllerTest {
                 new Metadata(query, 100L, SearchStrategy.SINGLE_TERM)
         );
 
-        given(bookSearchFacade.search(any(), any())).willReturn(result);
+        given(searchEngine.search(any(), any())).willReturn(result);
 
         // when, then
         mockMvc.perform(get("/books/search")
@@ -106,7 +106,7 @@ class BookQueryControllerTest {
                 List.of(),
                 new Metadata(query, 50L, SearchStrategy.SINGLE_TERM)
         );
-        given(bookSearchFacade.search(any(), any())).willReturn(result);
+        given(searchEngine.search(any(), any())).willReturn(result);
 
         // when, then
         mockMvc.perform(get("/books/search")

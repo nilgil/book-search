@@ -2,3 +2,4 @@ rootProject.name = 'book-search'
 
 include 'core'
 include 'share'
+include 'search'

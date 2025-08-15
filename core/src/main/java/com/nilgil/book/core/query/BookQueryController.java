@@ -1,7 +1,7 @@
 package com.nilgil.book.core.query;
 
-import com.nilgil.book.core.search.BookSearchFacade;
-import com.nilgil.book.core.search.executor.model.BookSearchResult;
+import com.nilgil.book.search.engine.SearchEngine;
+import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.share.PageReq;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookQueryController {
 
     private final BookReadService bookReadService;
-    private final BookSearchFacade bookSearchFacade;
+    private final SearchEngine searchEngine;
 
     @Operation(
             summary = "ISBN으로 도서 상세 조회",
@@ -52,7 +52,7 @@ public class BookQueryController {
             @RequestParam(defaultValue = "10") int size
     ) {
         PageReq pageReq = new PageReq(page, size);
-        BookSearchResult result = bookSearchFacade.search(q, pageReq);
+        BookSearchResult result = searchEngine.search(q, pageReq);
         return BookSearchResponse.from(q, result);
     }
 
@@ -63,6 +63,6 @@ public class BookQueryController {
     )
     @GetMapping("/search/top10")
     PopularKeywordsResponse getPopularKeywords() {
-        return new PopularKeywordsResponse(bookSearchFacade.getPopularKeywords());
+        return new PopularKeywordsResponse(searchEngine.getPopularKeywords());
     }
 }

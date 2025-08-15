@@ -1,8 +1,8 @@
 package com.nilgil.book.core.query;
 
-import com.nilgil.book.core.search.executor.model.BookHit;
-import com.nilgil.book.core.search.executor.model.BookSearchResult;
-import com.nilgil.book.core.search.executor.model.Metadata;
+import com.nilgil.book.search.engine.executor.model.BookHit;
+import com.nilgil.book.search.engine.executor.model.BookSearchResult;
+import com.nilgil.book.search.engine.executor.model.Metadata;
 import com.nilgil.book.share.PageInfo;
 import lombok.Builder;
 

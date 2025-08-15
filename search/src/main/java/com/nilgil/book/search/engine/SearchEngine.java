@@ -1,0 +1,40 @@
+package com.nilgil.book.search.engine;
+
+import com.nilgil.book.search.engine.executor.QueryExecutor;
+import com.nilgil.book.search.engine.executor.model.BookSearchResult;
+import com.nilgil.book.search.engine.parser.QueryParser;
+import com.nilgil.book.search.engine.parser.model.Query;
+import com.nilgil.book.search.engine.planner.PlannedQuery;
+import com.nilgil.book.search.engine.planner.QueryPlanner;
+import com.nilgil.book.search.keyword.KeywordSearchedEvent;
+import com.nilgil.book.search.keyword.SearchKeywordRepository;
+import com.nilgil.book.share.PageReq;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class SearchEngine {
+
+    private final QueryParser parser;
+    private final QueryPlanner planner;
+    private final QueryExecutor executor;
+
+    private final ApplicationEventPublisher publisher;
+    private final SearchKeywordRepository searchKeywordRepository;
+
+    public BookSearchResult search(String rawQuery, PageReq pageReq) {
+        Query query = parser.parse(rawQuery);
+        publisher.publishEvent(new KeywordSearchedEvent(query));
+
+        PlannedQuery plannedQuery = planner.plan(query);
+        return executor.execute(plannedQuery, pageReq, rawQuery);
+    }
+
+    public Map<String, Long> getPopularKeywords() {
+        return searchKeywordRepository.getPopularKeywords();
+    }
+}

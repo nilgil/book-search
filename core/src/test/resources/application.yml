@@ -3,6 +3,3 @@ spring:
     url: jdbc:h2:mem:testdb
     username: sa
     password:
-  sql.init:
-    data-locations:
-    schema-locations: classpath:schema.sql
