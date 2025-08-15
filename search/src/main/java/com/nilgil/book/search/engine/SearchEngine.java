@@ -6,6 +6,7 @@ import com.nilgil.book.search.engine.parser.QueryParser;
 import com.nilgil.book.search.engine.parser.model.Query;
 import com.nilgil.book.search.engine.planner.PlannedQuery;
 import com.nilgil.book.search.engine.planner.QueryPlanner;
+import com.nilgil.book.search.keyword.KeywordRank;
 import com.nilgil.book.search.keyword.KeywordSearchedEvent;
 import com.nilgil.book.search.keyword.SearchKeywordRepository;
 import com.nilgil.book.share.PageReq;
@@ -13,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class SearchEngine {
         return executor.execute(plannedQuery, pageReq, rawQuery);
     }
 
-    public Map<String, Long> getPopularKeywords() {
-        return searchKeywordRepository.getPopularKeywords();
+    public List<KeywordRank> getPopularKeywords(int size) {
+        return searchKeywordRepository.getPopularKeywords(size);
     }
 }

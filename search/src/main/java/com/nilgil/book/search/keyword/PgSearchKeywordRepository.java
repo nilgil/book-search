@@ -8,11 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,19 +27,12 @@ public class PgSearchKeywordRepository implements SearchKeywordRepository {
     }
 
     @Override
-    public Map<String, Long> getPopularKeywords() {
-        List<String> populars = jdbcTemplate.query(
+    public List<KeywordRank> getPopularKeywords(int size) {
+        return jdbcTemplate.query(
                 GET_POPULAR_KEYWORDS_SQL,
-                (rs, rowNum) -> rs.getString("keyword")
+                (rs, rowNum) -> new KeywordRank(rowNum, rs.getString("keyword")),
+                size
         );
-        return IntStream.range(0, populars.size())
-                .boxed()
-                .collect(Collectors.toMap(
-                        populars::get,
-                        i -> (long) i + 1,
-                        (v1, v2) -> v1,
-                        LinkedHashMap::new
-                ));
     }
 
     private void increment(Clause clause) {
@@ -66,6 +55,6 @@ public class PgSearchKeywordRepository implements SearchKeywordRepository {
                     search_keywords
                 ORDER BY
                     search_count DESC
-                LIMIT 10;
+                LIMIT ?;
             """;
 }

@@ -9,8 +9,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Books", description = "도서 조회 및 검색 API")
 @RestController
@@ -32,7 +35,9 @@ public class BookQueryController {
     @GetMapping("/{isbn13}")
     BookDetailResponse getDetailByIsbn(
             @Parameter(description = "ISBN-13", example = "9788991000155")
-            @PathVariable String isbn13) {
+            @PathVariable
+            String isbn13
+    ) {
         Isbn isbn = new Isbn(isbn13);
         return bookReadService.getDetailByIsbn(isbn);
     }
@@ -45,11 +50,15 @@ public class BookQueryController {
     @GetMapping("/search")
     BookSearchResponse searchByQuery(
             @Parameter(description = "검색 질의", example = "java|스프링")
-            @RequestParam String q,
+            @RequestParam
+            String q,
             @Parameter(description = "페이지 번호(0부터 시작)", example = "0")
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0")
+            int page,
             @Parameter(description = "페이지 크기", example = "10")
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10")
+            @Max(100)
+            int size
     ) {
         PageReq pageReq = new PageReq(page, size);
         BookSearchResult result = searchEngine.search(q, pageReq);
@@ -59,10 +68,17 @@ public class BookQueryController {
     @Operation(
             summary = "인기 검색어 Top 10",
             description = "최근 집계된 인기 검색어 상위 10개를 조회합니다.",
-            responses = @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = PopularKeywordsResponse.class)))
+            responses = @ApiResponse(responseCode = "200", description = "조회 성공", content = @Content(schema = @Schema(implementation = KeywordRankResponse.class)))
     )
-    @GetMapping("/search/top10")
-    PopularKeywordsResponse getPopularKeywords() {
-        return new PopularKeywordsResponse(searchEngine.getPopularKeywords());
+    @GetMapping("/keywords/rank")
+    List<KeywordRankResponse> getKeywordRanks(
+            @Parameter(description = "조회 개수", example = "10")
+            @RequestParam(defaultValue = "10")
+            @Max(100)
+            int size
+    ) {
+        return searchEngine.getPopularKeywords(size)
+                .stream().map(KeywordRankResponse::from)
+                .toList();
     }
 }
