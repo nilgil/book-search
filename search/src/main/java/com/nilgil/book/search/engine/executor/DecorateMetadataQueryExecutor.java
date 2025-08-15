@@ -3,7 +3,7 @@ package com.nilgil.book.search.engine.executor;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.executor.model.Metadata;
 import com.nilgil.book.search.engine.planner.PlannedQuery;
-import com.nilgil.book.share.PageReq;
+import com.nilgil.book.share.PageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,10 @@ public class DecorateMetadataQueryExecutor implements QueryExecutor {
     private final QueryExecutor primaryQueryExecutor;
 
     @Override
-    public BookSearchResult execute(PlannedQuery query, PageReq pageReq, String rawQuery) {
+    public BookSearchResult execute(PlannedQuery query, PageRequest pageRequest, String rawQuery) {
         long startTime = System.currentTimeMillis();
 
-        BookSearchResult original = primaryQueryExecutor.execute(query, pageReq, rawQuery);
+        BookSearchResult original = primaryQueryExecutor.execute(query, pageRequest, rawQuery);
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
@@ -44,7 +44,7 @@ public class DecorateMetadataQueryExecutor implements QueryExecutor {
 
     private BookSearchResult createSearchResult(BookSearchResult original, Metadata metadata) {
         return new BookSearchResult(
-                original.pageInfo(),
+                original.pageResponse(),
                 original.bookHits(),
                 metadata
         );

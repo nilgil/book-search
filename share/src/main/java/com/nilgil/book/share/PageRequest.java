@@ -1,6 +1,6 @@
 package com.nilgil.book.share;
 
-public record PageReq(
+public record PageRequest(
         int page,
         int size
 ) {

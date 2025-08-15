@@ -5,7 +5,7 @@ import com.nilgil.book.search.engine.executor.model.BookHit;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.executor.model.Metadata;
 import com.nilgil.book.search.engine.planner.SearchStrategy;
-import com.nilgil.book.share.PageInfo;
+import com.nilgil.book.share.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ class BookQueryControllerTest {
         Isbn isbn = new Isbn("9788991000155");
 
         BookSearchResult result = new BookSearchResult(
-                new PageInfo(1, 10, 1, 8),
+                new PageResponse(1, 10, 1, 8),
                 List.of(new BookHit(isbn.asIsbn13(), "테스트 제목", "부제목", "이미지URL", "저자", "2024-01-15")),
                 new Metadata(query, 100L, SearchStrategy.SINGLE_TERM)
         );
@@ -102,7 +102,7 @@ class BookQueryControllerTest {
         // given
         String query = "존재하지않는검색어";
         BookSearchResult result = new BookSearchResult(
-                new PageInfo(0, 10, 0, 0),
+                new PageResponse(0, 10, 0, 0),
                 List.of(),
                 new Metadata(query, 50L, SearchStrategy.SINGLE_TERM)
         );

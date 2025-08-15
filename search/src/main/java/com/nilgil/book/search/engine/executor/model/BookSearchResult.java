@@ -1,12 +1,12 @@
 package com.nilgil.book.search.engine.executor.model;
 
 
-import com.nilgil.book.share.PageInfo;
+import com.nilgil.book.share.PageResponse;
 
 import java.util.List;
 
 public record BookSearchResult(
-        PageInfo pageInfo,
+        PageResponse pageResponse,
         List<BookHit> bookHits,
         Metadata metadata
 ) {

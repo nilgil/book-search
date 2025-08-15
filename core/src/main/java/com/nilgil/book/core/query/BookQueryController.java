@@ -2,7 +2,7 @@ package com.nilgil.book.core.query;
 
 import com.nilgil.book.search.engine.SearchEngine;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
-import com.nilgil.book.share.PageReq;
+import com.nilgil.book.share.PageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,8 +60,8 @@ public class BookQueryController {
             @Max(100)
             int size
     ) {
-        PageReq pageReq = new PageReq(page, size);
-        BookSearchResult result = searchEngine.search(q, pageReq);
+        PageRequest pageRequest = new PageRequest(page, size);
+        BookSearchResult result = searchEngine.search(q, pageRequest);
         return BookSearchResponse.from(q, result);
     }
 

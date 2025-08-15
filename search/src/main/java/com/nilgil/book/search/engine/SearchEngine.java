@@ -9,7 +9,7 @@ import com.nilgil.book.search.engine.planner.QueryPlanner;
 import com.nilgil.book.search.keyword.KeywordRank;
 import com.nilgil.book.search.keyword.KeywordSearchedEvent;
 import com.nilgil.book.search.keyword.SearchKeywordRepository;
-import com.nilgil.book.share.PageReq;
+import com.nilgil.book.share.PageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -27,12 +27,12 @@ public class SearchEngine {
     private final ApplicationEventPublisher publisher;
     private final SearchKeywordRepository searchKeywordRepository;
 
-    public BookSearchResult search(String rawQuery, PageReq pageReq) {
+    public BookSearchResult search(String rawQuery, PageRequest pageRequest) {
         Query query = parser.parse(rawQuery);
         publisher.publishEvent(new KeywordSearchedEvent(query));
 
         PlannedQuery plannedQuery = planner.plan(query);
-        return executor.execute(plannedQuery, pageReq, rawQuery);
+        return executor.execute(plannedQuery, pageRequest, rawQuery);
     }
 
     public List<KeywordRank> getPopularKeywords(int size) {

@@ -3,7 +3,7 @@ package com.nilgil.book.core.query;
 import com.nilgil.book.search.engine.executor.model.BookHit;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.executor.model.Metadata;
-import com.nilgil.book.share.PageInfo;
+import com.nilgil.book.share.PageResponse;
 import lombok.Builder;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 public record BookSearchResponse(
         String searchQuery,
-        PageInfo pageInfo,
+        PageResponse pageResponse,
         List<BookResponse> books,
         SearchMetadata searchMetadata
 ) {
@@ -19,7 +19,7 @@ public record BookSearchResponse(
     public static BookSearchResponse from(String query, BookSearchResult result) {
         return BookSearchResponse.builder()
                 .searchQuery(query)
-                .pageInfo(result.pageInfo())
+                .pageResponse(result.pageResponse())
                 .books(getBookResponses(result))
                 .searchMetadata(getSearchMetadata(result))
                 .build();

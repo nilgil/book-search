@@ -1,6 +1,6 @@
 package com.nilgil.book.share;
 
-public record PageInfo(
+public record PageResponse(
         int page,
         int size,
         int totalPages,
