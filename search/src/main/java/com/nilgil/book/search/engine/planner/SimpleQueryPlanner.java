@@ -9,14 +9,12 @@ import java.util.List;
 public class SimpleQueryPlanner implements QueryPlanner {
 
     @Override
-    public PlannedQuery plan(Query query) {
-        SearchStrategy strategy = switch (query) {
+    public SearchStrategy plan(Query query) {
+        return switch (query) {
             case TermQuery tq -> SearchStrategy.SINGLE_TERM;
             case CompoundQuery cq -> determineStrategyForCompound(cq);
             default -> SearchStrategy.NONE;
         };
-
-        return new PlannedQuery(strategy, query);
     }
 
     private SearchStrategy determineStrategyForCompound(CompoundQuery compoundQuery) {

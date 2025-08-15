@@ -2,7 +2,8 @@ package com.nilgil.book.search.engine.executor;
 
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.executor.model.Metadata;
-import com.nilgil.book.search.engine.planner.PlannedQuery;
+import com.nilgil.book.search.engine.parser.model.Query;
+import com.nilgil.book.search.engine.planner.SearchStrategy;
 import com.nilgil.book.share.PageRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
@@ -16,15 +17,15 @@ public class DecorateMetadataQueryExecutor implements QueryExecutor {
     private final QueryExecutor primaryQueryExecutor;
 
     @Override
-    public BookSearchResult execute(PlannedQuery query, PageRequest pageRequest, String rawQuery) {
+    public BookSearchResult execute(Query query, SearchStrategy strategy, PageRequest pageRequest, String rawQuery) {
         long startTime = System.currentTimeMillis();
 
-        BookSearchResult original = primaryQueryExecutor.execute(query, pageRequest, rawQuery);
+        BookSearchResult original = primaryQueryExecutor.execute(query, strategy, pageRequest, rawQuery);
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-        Metadata metadata = createMetadata(query, executionTime);
+        Metadata metadata = createMetadata(query, strategy, executionTime);
 
         return createSearchResult(original, metadata);
     }
@@ -34,11 +35,11 @@ public class DecorateMetadataQueryExecutor implements QueryExecutor {
         return primaryQueryExecutor.getEngineName();
     }
 
-    private Metadata createMetadata(PlannedQuery query, long executionTime) {
+    private Metadata createMetadata(Query query, SearchStrategy strategy, long executionTime) {
         return new Metadata(
                 getEngineName(),
                 executionTime,
-                query.strategy()
+                strategy
         );
     }
 

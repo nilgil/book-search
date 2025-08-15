@@ -1,6 +1,9 @@
 package com.nilgil.book.search.engine.planner;
 
 import com.nilgil.book.search.engine.parser.model.*;
+import com.nilgil.book.search.engine.planner.QueryPlanner;
+import com.nilgil.book.search.engine.planner.SearchStrategy;
+import com.nilgil.book.search.engine.planner.SimpleQueryPlanner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +19,9 @@ class SimpleQueryPlannerTest {
     @DisplayName("하나의 용어로 구성된 쿼리는 SINGLE_TERM 전략이 사용된다")
     void shouldPlanTermQuery() {
         Query query = new TermQuery("test");
-        PlannedQuery planned = planner.plan(query);
+        SearchStrategy strategy = planner.plan(query);
 
-        assertThat(planned.strategy()).isEqualTo(SearchStrategy.SINGLE_TERM);
-        assertThat(planned.query()).isEqualTo(query);
+        assertThat(strategy).isEqualTo(SearchStrategy.SINGLE_TERM);
     }
 
     @Test
@@ -29,10 +31,9 @@ class SimpleQueryPlannerTest {
                 new Clause(new TermQuery("term1"), Occur.SHOULD),
                 new Clause(new TermQuery("term2"), Occur.SHOULD)
         ));
-        PlannedQuery planned = planner.plan(query);
+        SearchStrategy strategy = planner.plan(query);
 
-        assertThat(planned.strategy()).isEqualTo(SearchStrategy.OR_OPERATION);
-        assertThat(planned.query()).isEqualTo(query);
+        assertThat(strategy).isEqualTo(SearchStrategy.OR_OPERATION);
     }
 
     @Test
@@ -42,10 +43,9 @@ class SimpleQueryPlannerTest {
                 new Clause(new TermQuery("must"), Occur.MUST),
                 new Clause(new TermQuery("not"), Occur.MUST_NOT)
         ));
-        PlannedQuery planned = planner.plan(query);
+        SearchStrategy strategy = planner.plan(query);
 
-        assertThat(planned.strategy()).isEqualTo(SearchStrategy.MUST_AND_NOT_OPERATION);
-        assertThat(planned.query()).isEqualTo(query);
+        assertThat(strategy).isEqualTo(SearchStrategy.MUST_AND_NOT_OPERATION);
     }
 
     @Test
@@ -56,9 +56,8 @@ class SimpleQueryPlannerTest {
                 new Clause(new TermQuery("term2"), Occur.MUST),
                 new Clause(new TermQuery("term3"), Occur.MUST)
         ));
-        PlannedQuery planned = planner.plan(query);
+        SearchStrategy strategy = planner.plan(query);
 
-        assertThat(planned.strategy()).isEqualTo(SearchStrategy.NONE);
-        assertThat(planned.query()).isEqualTo(query);
+        assertThat(strategy).isEqualTo(SearchStrategy.NONE);
     }
 }

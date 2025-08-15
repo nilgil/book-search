@@ -2,8 +2,8 @@ package com.nilgil.book.search.engine.executor;
 
 import com.nilgil.book.search.engine.parser.model.Clause;
 import com.nilgil.book.search.engine.parser.model.CompoundQuery;
+import com.nilgil.book.search.engine.parser.model.Query;
 import com.nilgil.book.search.engine.parser.model.TermQuery;
-import com.nilgil.book.search.engine.planner.PlannedQuery;
 import com.nilgil.book.search.engine.planner.SearchStrategy;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +33,12 @@ public class PgFtsExpressionBuilder {
         strategies.put(SearchStrategy.MUST_AND_NOT_OPERATION, createCompoundStrategy(" & !"));
     }
 
-    public String build(PlannedQuery plannedQuery) {
-        ExpressionStrategy strategy = strategies.get(plannedQuery.strategy());
-        if (strategy == null) {
+    public String build(Query query, SearchStrategy strategy) {
+        ExpressionStrategy expressionStrategy = strategies.get(strategy);
+        if (expressionStrategy == null) {
             return "";
         }
-        return strategy.buildExpression(plannedQuery.query());
+        return expressionStrategy.buildExpression(query);
     }
 
     private ExpressionStrategy createCompoundStrategy(String operator) {

@@ -4,8 +4,8 @@ import com.nilgil.book.search.engine.executor.QueryExecutor;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.parser.QueryParser;
 import com.nilgil.book.search.engine.parser.model.Query;
-import com.nilgil.book.search.engine.planner.PlannedQuery;
 import com.nilgil.book.search.engine.planner.QueryPlanner;
+import com.nilgil.book.search.engine.planner.SearchStrategy;
 import com.nilgil.book.search.keyword.KeywordRank;
 import com.nilgil.book.search.keyword.KeywordSearchedEvent;
 import com.nilgil.book.search.keyword.SearchKeywordRepository;
@@ -31,8 +31,8 @@ public class SearchEngine {
         Query query = parser.parse(rawQuery);
         publisher.publishEvent(new KeywordSearchedEvent(query));
 
-        PlannedQuery plannedQuery = planner.plan(query);
-        return executor.execute(plannedQuery, pageRequest, rawQuery);
+        SearchStrategy strategy = planner.plan(query);
+        return executor.execute(query, strategy, pageRequest, rawQuery);
     }
 
     public List<KeywordRank> getPopularKeywords(int size) {
