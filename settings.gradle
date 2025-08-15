@@ -1,5 +1,6 @@
 rootProject.name = 'book-search'
 
-include 'core'
+include 'core:api'
+include 'core:domain'
 include 'share'
 include 'search'
