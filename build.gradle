@@ -1,45 +1,42 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version "${springBootVersion}"
-    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    id 'java-library'
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version "${springDependencyManagementVersion}" apply false
 }
 
-group = projectGroup
-version = applicationVersion
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(javaVersion)
+    group = projectGroup
+    version = applicationVersion
+
+    repositories {
+        mavenCentral()
     }
-}
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(javaVersion)
+        }
     }
-}
 
-repositories {
-    mavenCentral()
-}
+    bootJar.enabled = false
+    jar.enabled = true
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swaggerVersion}"
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    runtimeOnly 'org.postgresql:postgresql'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'com.h2database:h2'
+    }
 
-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'com.h2database:h2'
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }

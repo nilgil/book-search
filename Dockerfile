@@ -3,10 +3,9 @@ FROM gradle:8.14-jdk21-alpine AS builder
 
 WORKDIR /build
 
-COPY build.gradle settings.gradle gradle.properties /build/
-COPY src /build/src
+COPY . .
 
-RUN gradle bootJar --no-daemon
+RUN gradle :core:api:bootJar --no-daemon
 
 
 # 실행 환경
@@ -14,6 +13,6 @@ FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-COPY --from=builder /build/build/libs/*.jar app.jar
+COPY --from=builder /build/core/api/build/libs/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
