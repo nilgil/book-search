@@ -5,6 +5,7 @@ import com.nilgil.book.search.engine.executor.model.BookHit;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
 import com.nilgil.book.search.engine.executor.model.Metadata;
 import com.nilgil.book.search.engine.planner.SearchStrategy;
+import com.nilgil.book.search.keyword.SearchKeywordService;
 import com.nilgil.book.share.PageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ class BookQueryControllerTest {
 
     @MockitoBean
     private SearchEngine searchEngine;
+
+    @MockitoBean
+    private SearchKeywordService searchKeywordService;
 
     @Test
     @DisplayName("ISBN으로 도서 상세 조회 성공")

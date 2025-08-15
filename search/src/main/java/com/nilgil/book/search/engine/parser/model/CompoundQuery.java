@@ -2,9 +2,7 @@ package com.nilgil.book.search.engine.parser.model;
 
 import java.util.List;
 
-public record CompoundQuery(
-        List<Clause> clauses
-) implements Query {
+public record CompoundQuery(List<Clause> clauses) implements Query {
     public CompoundQuery {
         clauses = clauses == null ? List.of() : clauses;
     }

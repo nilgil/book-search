@@ -1,12 +1,11 @@
 package com.nilgil.book.search.keyword;
 
-import com.nilgil.book.search.engine.parser.model.Query;
-
 import java.util.List;
+import java.util.Set;
 
 public interface SearchKeywordRepository {
 
-    void increment(Query query);
+    void increment(Set<String> keywords);
 
     List<KeywordRank> getPopularKeywords(int size);
 }

@@ -2,6 +2,7 @@ package com.nilgil.book.core.query;
 
 import com.nilgil.book.search.engine.SearchEngine;
 import com.nilgil.book.search.engine.executor.model.BookSearchResult;
+import com.nilgil.book.search.keyword.SearchKeywordService;
 import com.nilgil.book.share.PageRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,7 @@ public class BookQueryController {
 
     private final BookReadService bookReadService;
     private final SearchEngine searchEngine;
+    private final SearchKeywordService searchKeywordService;
 
     @Operation(
             summary = "ISBN으로 도서 상세 조회",
@@ -77,7 +79,7 @@ public class BookQueryController {
             @Max(100)
             int size
     ) {
-        return searchEngine.getPopularKeywords(size)
+        return searchKeywordService.getPopularKeywords(size)
                 .stream().map(KeywordRankResponse::from)
                 .toList();
     }
