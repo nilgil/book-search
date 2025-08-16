@@ -1,6 +1,7 @@
 package com.nilgil.book.search.engine;
 
 import com.nilgil.book.search.engine.parser.model.CompoundQuery;
+import com.nilgil.book.search.engine.parser.model.Occur;
 import com.nilgil.book.search.engine.parser.model.Query;
 import com.nilgil.book.search.engine.parser.model.TermQuery;
 import lombok.RequiredArgsConstructor;
@@ -23,20 +24,23 @@ public class SearchedEventPublisher {
     }
 
     public Set<String> extractKeywords(Query query) {
-        return switch (query) {
+        switch (query) {
             case TermQuery tq -> {
                 if (tq.value() == null || tq.value().isBlank()) {
-                    yield Collections.emptySet();
+                    return Collections.emptySet();
                 }
-                yield Set.of(tq.value());
+                return Set.of(tq.value());
             }
-
-            case CompoundQuery cq -> cq.clauses().stream()
-                    .flatMap(clause -> extractKeywords(clause.query()).stream())
-                    .collect(Collectors.toSet());
-
-            default -> Collections.emptySet();
-        };
+            case CompoundQuery cq -> {
+                return cq.clauses().stream()
+                        .filter(clause -> clause.occur() != Occur.MUST_NOT)
+                        .flatMap(clause -> extractKeywords(clause.query()).stream())
+                        .collect(Collectors.toSet());
+            }
+            default -> {
+                return Collections.emptySet();
+            }
+        }
     }
 
 }
